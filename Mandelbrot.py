@@ -18,10 +18,10 @@ def mandelbrot(cr, ci, maxIters):
 
 if __name__ == '__main__':
 
-    minR = -0.17     # choose minimum real value to sample from
-    maxR = -0.15      # choose maximum real value to sample from
-    minI = 1.025      # smame for minimum imaginary...
-    maxI = 1.045      # and maximum imaginary
+    minR = -2     # choose minimum real value to sample from
+    maxR = 2      # choose maximum real value to sample from
+    minI = -2     # smame for minimum imaginary...
+    maxI = 2      # and maximum imaginary
     res = 1080          # choose the resolution of the image; that is, how many numbers between minR/minI and maxR/maxI to evaluate
     maxIters = 200      # choose a limit for the number of iterations 
     
