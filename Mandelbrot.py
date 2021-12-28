@@ -1,6 +1,6 @@
 import numpy as np # installed with matplotlib
 import matplotlib.pyplot as plt
-from multiprocessing import Pool
+import multiprocessing as mp
 import time
 
 # the mandelbrot set creates what is considered one of the most elegent visualizations in mathematics
@@ -28,10 +28,12 @@ def mandelbrot(cr, ci, maxIters):           # takes a complex number c (cr and c
         zr = zr * zr - zi * zi + cr                         # real part of z^2 + c (using rules for operations on complex numbers)
         zi = 2 * zrTemp * zi + ci                           # imaginary part of z^2 + c
 
-    return iters                                            # return the number of iterations it takes for z to diverge (magnited squared exceeds 4) or maxIters (approximately representing boundedness)
+    return iters     # return the number of iterations it takes for z to diverge (magnited squared exceeds 4) or maxIters (approximately representing boundedness)
     
 
 if __name__ == '__main__':
+
+    start = time.time()
 
     minR = -2      # choose minimum real value to sample from
     maxR = 2      # choose maximum real value to sample from
@@ -46,7 +48,7 @@ if __name__ == '__main__':
 
     result = []     # initialize result as an empty list. This will contain the calulation of mandelbrot for every element of x and y
 
-    with Pool(3) as p:                                                                  # create 3 threads (3 cores divide problem among themselves)                                                      
+    with mp.Pool(mp.cpu_count()) as p:                                                  # divide the problem amongst all the logical processors in the machine                                                                      
         result.append(p.starmap(mandelbrot, [(i, j, maxIters) for j in y for i in x]))  # append the calculation of mandelbrot for eah entry in x (columns) and y (rows) to result
 
     z = np.array(result).reshape(res, res) # for each imaginary value...
@@ -56,5 +58,9 @@ if __name__ == '__main__':
     plt.imshow(z, cmap = 'twilight_shifted', interpolation = 'bilinear', extent = [minR, maxR, minI, maxI]) # plot matrix z with bilinear interpolation
     plt.xlabel('Re(c)')
     plt.ylabel('Im(c)')
+
+    end = time.time()
+
+    print('Execution time: ' +  str(end - start))
 
     plt.show() # output plot
